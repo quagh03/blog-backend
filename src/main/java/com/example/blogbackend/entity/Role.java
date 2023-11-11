@@ -1,8 +1,8 @@
 package com.example.blogbackend.entity;
 
 import jakarta.persistence.*;
-
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(
@@ -23,23 +23,53 @@ public class Role {
     @Column(name = "role", nullable = false)
     private UserRole role;
 
-    // Constructors, getters, and setters
+    public Role() {
+        // Default constructor
+    }
+
+    public Role(User user, UserRole role) {
+        this.user = user;
+        this.role = role;
+    }
+
+    // Getters and setters
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+    // Enum UserRole definition
+    public enum UserRole {
+        ROLE_ADMIN,
+        ROLE_AUTHOR,
+        ROLE_GUEST
+    }
 
     public static class RoleId implements Serializable {
 
         private Long user;
-
         private String role;
 
         public RoleId() {
+            // Default constructor
         }
 
         public RoleId(Long user, String role) {
             this.user = user;
             this.role = role;
         }
-
-        // Equals and hashCode methods (make sure to implement them)
 
         public Long getUser() {
             return user;
@@ -56,13 +86,19 @@ public class Role {
         public void setRole(String role) {
             this.role = role;
         }
-    }
 
-    // Enum UserRole definition
-    public enum UserRole {
-        ROLE_ADMIN,
-        ROLE_AUTHOR,
-        ROLE_GUEST
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            RoleId roleId = (RoleId) o;
+            return Objects.equals(user, roleId.user) &&
+                    Objects.equals(role, roleId.role);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(user, role);
+        }
     }
 }
-
