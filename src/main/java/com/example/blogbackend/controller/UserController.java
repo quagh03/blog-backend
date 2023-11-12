@@ -54,20 +54,32 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addUser(User userToAdd){
-        //needed to be compelete
-        return null;
+    public ResponseEntity<?> addUser(@RequestBody User userToAdd){
+        try {
+            User addedUser =  userService.addUser(userToAdd);
+            return new ResponseEntity<>("Đã thêm người dùng:\n" + addedUser,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("Lỗi: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("{userid}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userid){
-        //needed to be compelete
-        return null;
+        try {
+            userService.deleteUser(userid);
+            return new ResponseEntity<>("Đã xóa người dùng với Id: " + userid, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage() + userid, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PostMapping("{userid}")
-    public ResponseEntity<?> updateUser(@PathVariable Long userid, User newUser){
-        //needed to be compelete
-        return null;
+    @PutMapping("{userid}")
+    public ResponseEntity<?> updateUser(@PathVariable Long userid, @RequestBody User newUser){
+        try {
+            userService.updateUser(userid, newUser);
+            return new ResponseEntity<>("Đã cập nhật người dùng có Id: " + userid, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage() + userid, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

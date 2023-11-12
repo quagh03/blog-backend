@@ -43,4 +43,44 @@ public class UserServiceImpl implements UserService{
             throw new CustomException("Lỗi khi lấy người dùng theo Username", e);
         }
     }
+
+    @Override
+    public void deleteUser(Long userid) {
+        try{
+            User user = userRepository.findById(userid)
+                    .orElseThrow(() -> new NoSuchElementException("Không tìm thấy người dùng với Id: " + userid));
+            userRepository.delete(user);
+        }catch (Exception e){
+            throw new CustomException("Lỗi khi xóa người dùng theo Id", e);
+        }
+    }
+
+    @Override
+    public User addUser(User userToAdd){
+        try {
+            return userRepository.save(userToAdd);
+        }catch (Exception e){
+            throw new CustomException("Lỗi khi thêm người dùng", e);
+        }
+    }
+
+    @Override
+    public User updateUser(Long userid, User userToUpdate){
+        try {
+            User existUser = userRepository.findById(userid)
+                    .orElseThrow(() -> new NoSuchElementException("Không tìm thấy người dùng với Id: " + userid));
+            existUser.setFirstName(userToUpdate.getFirstName());
+            existUser.setLastName(userToUpdate.getLastName());
+            existUser.setMobile(userToUpdate.getMobile());
+            existUser.setEmail(userToUpdate.getEmail());
+            existUser.setPasswordHash(userToUpdate.getPasswordHash());
+            existUser.setRegisteredAt(userToUpdate.getRegisteredAt());
+            existUser.setLastLogin(userToUpdate.getLastLogin());
+            existUser.setIntro(userToUpdate.getIntro());
+            existUser.setProfile(userToUpdate.getProfile());
+            return userRepository.save(existUser);
+        }catch (Exception e){
+            throw new CustomException("Lỗi khi cập nhật người dùng", e);
+        }
+    }
 }
