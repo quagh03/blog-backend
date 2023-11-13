@@ -27,11 +27,11 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{userid}")
-    public ResponseEntity<?> getUserById(@PathVariable Long userid){
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id){
         try {
-            User user = userService.getUserById(userid)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy người dùng với ID: " + userid));
+            User user = userService.getUserById(id)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy người dùng với ID: " + id));
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (ResponseStatusException e) {
             throw e;
@@ -40,8 +40,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("username={username}")
-    public ResponseEntity<?> getUserByUsername(@PathVariable String username){
+    @GetMapping("/")
+    public ResponseEntity<?> getUserByUsername(@RequestParam String username){
         try {
             User user = userService.getUserByUsername(username)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy người dùng với Username: " + username));
@@ -63,23 +63,23 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("{userid}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long userid){
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(@RequestParam Long id){
         try {
-            userService.deleteUser(userid);
-            return new ResponseEntity<>("Đã xóa người dùng với Id: " + userid, HttpStatus.OK);
+            userService.deleteUser(id);
+            return new ResponseEntity<>("Deleted user with Id: " + id, HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage() + userid, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage() + id, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("{userid}")
-    public ResponseEntity<?> updateUser(@PathVariable Long userid, @RequestBody User newUser){
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestParam Long id, @RequestBody User newUser){
         try {
-            userService.updateUser(userid, newUser);
-            return new ResponseEntity<>("Đã cập nhật người dùng có Id: " + userid, HttpStatus.OK);
+            userService.updateUser(id, newUser);
+            return new ResponseEntity<>("Đã cập nhật người dùng có Id: " + id, HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage() + userid, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage() + id, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
