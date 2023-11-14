@@ -3,6 +3,7 @@ package com.example.blogbackend.service;
 import com.example.blogbackend.entity.User;
 import com.example.blogbackend.exceptionhandle.CustomException;
 import com.example.blogbackend.repository.UserRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,15 +70,7 @@ public class UserServiceImpl implements UserService{
         try {
             User existUser = userRepository.findById(userid)
                     .orElseThrow(() -> new NoSuchElementException("Không tìm thấy người dùng với Id: " + userid));
-            existUser.setFirstName(userToUpdate.getFirstName());
-            existUser.setLastName(userToUpdate.getLastName());
-            existUser.setMobile(userToUpdate.getMobile());
-            existUser.setEmail(userToUpdate.getEmail());
-            existUser.setPasswordHash(userToUpdate.getPasswordHash());
-            existUser.setRegisteredAt(userToUpdate.getRegisteredAt());
-            existUser.setLastLogin(userToUpdate.getLastLogin());
-            existUser.setIntro(userToUpdate.getIntro());
-            existUser.setProfile(userToUpdate.getProfile());
+            BeanUtils.copyProperties(userToUpdate, existUser, "id");
             return userRepository.save(existUser);
         }catch (Exception e){
             throw new CustomException("Lỗi khi cập nhật người dùng", e);
