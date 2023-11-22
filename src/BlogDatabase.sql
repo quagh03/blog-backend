@@ -185,3 +185,70 @@ CREATE TABLE `blog`.`role` (
     ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Sample data for the 'user' table
+INSERT INTO `blog`.`user` (`first_name`, `last_name`, `username`, `mobile`, `email`, `password_hash`, `registered_at`, `intro`, `profile`)
+VALUES
+    ('John', 'Doe', 'johndoe', '123456789', 'john.doe@example.com', 'hashed_password_1', NOW(), 'Intro 1', 'Profile 1'),
+    ('Jane', 'Doe', 'janedoe', '987654321', 'jane.doe@example.com', 'hashed_password_2', NOW(), 'Intro 2', 'Profile 2'),
+    ('Bob', 'Smith', 'bobsmith', '555555555', 'bob.smith@example.com', 'hashed_password_3', NOW(), 'Intro 3', 'Profile 3');
+
+-- Sample data for the 'post' table
+INSERT INTO `blog`.`post` (`author_id`, `title`, `slug`, `summary`, `published`, `created_at`, `content`)
+VALUES
+    (1, 'Post 1 Title', 'post-1-title', 'Summary 1', 1, NOW(), 'Content 1'),
+    (2, 'Post 2 Title', 'post-2-title', 'Summary 2', 1, NOW(), 'Content 2'),
+    (3, 'Post 3 Title', 'post-3-title', 'Summary 3', 1, NOW(), 'Content 3');
+
+-- Sample data for the 'post_meta' table
+INSERT INTO `blog`.`post_meta` (`post_id`, `key`, `content`)
+VALUES
+    (1, 'meta_key_1', 'Meta Content 1'),
+    (2, 'meta_key_2', 'Meta Content 2'),
+    (3, 'meta_key_3', 'Meta Content 3');
+
+-- Sample data for the 'post_comment' table
+INSERT INTO `blog`.`post_comment` (`post_id`, `title`, `published`, `created_at`, `content`, `user_id`)
+VALUES
+    (1, 'Comment 1 Title', 1, NOW(), 'Comment Content 1', 2),
+    (2, 'Comment 2 Title', 1, NOW(), 'Comment Content 2', 3),
+    (3, 'Comment 3 Title', 1, NOW(), 'Comment Content 3', 1);
+
+-- Sample data for the 'category' table
+INSERT INTO `blog`.`category` (`title`, `slug`, `content`)
+VALUES
+    ('Category 1', 'category-1', 'Category Content 1'),
+    ('Category 2', 'category-2', 'Category Content 2'),
+    ('Category 3', 'category-3', 'Category Content 3');
+
+-- Sample data for the 'post_category' table
+INSERT INTO `blog`.`post_category` (`post_id`, `category_id`)
+VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (1, 2),
+    (1, 3),
+    (2, 1);
+
+-- Sample data for the 'tag' table
+INSERT INTO `blog`.`tag` (`title`, `slug`, `content`)
+VALUES
+    ('Tag 1', 'tag-1', 'Tag Content 1'),
+    ('Tag 2', 'tag-2', 'Tag Content 2'),
+    ('Tag 3', 'tag-3', 'Tag Content 3');
+
+-- Sample data for the 'post_tag' table
+INSERT INTO `blog`.`post_tag` (`post_id`, `tag_id`)
+VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3);
+
+-- Sample data for the 'role' table
+INSERT INTO `blog`.`role` (`user_id`, `role`)
+VALUES
+    (1, 'ROLE_ADMIN'),
+    (2, 'ROLE_AUTHOR'),
+    (3, 'ROLE_AUTHOR');
+
+
