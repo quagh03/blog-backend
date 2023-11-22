@@ -1,8 +1,10 @@
 package com.example.blogbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -11,13 +13,19 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Post parent;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostCategory> categories;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -52,9 +60,10 @@ public class Post {
     public Post() {
     }
 
-    public Post(User author, Post parent, String title, String metaTitle, String slug, String summary, boolean published, Date createdAt, Date updatedAt, Date publishedAt, String content, String thumbnail) {
+    public Post(User author, Post parent, List<PostCategory> categories, String title, String metaTitle, String slug, String summary, boolean published, Date createdAt, Date updatedAt, Date publishedAt, String content, String thumbnail) {
         this.author = author;
         this.parent = parent;
+        this.categories = categories;
         this.title = title;
         this.metaTitle = metaTitle;
         this.slug = slug;
@@ -65,6 +74,14 @@ public class Post {
         this.publishedAt = publishedAt;
         this.content = content;
         this.thumbnail = thumbnail;
+    }
+
+    public List<PostCategory> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<PostCategory> categories) {
+        this.categories = categories;
     }
 
     public Long getId() {

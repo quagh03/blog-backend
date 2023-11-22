@@ -1,5 +1,6 @@
 package com.example.blogbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -16,6 +17,7 @@ public class PostCategory {
     @EmbeddedId
     private PostCategoryId id;
 
+    @JsonBackReference
     @ManyToOne
     @MapsId("postId")
     @JoinColumn(name = "post_id", nullable = false)

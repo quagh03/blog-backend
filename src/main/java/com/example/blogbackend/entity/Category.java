@@ -24,6 +24,9 @@ public class Category {
     @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Category> children;
 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<PostCategory> posts;
+
     @Column(name = "title", nullable = false)
     private String title;
 

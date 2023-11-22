@@ -11,7 +11,7 @@ import java.rmi.server.ExportException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/api/blog/posts")
 public class PostController {
     private final PostService postService;
 
