@@ -1,10 +1,18 @@
 package com.example.blogbackend.service;
 
+import com.example.blogbackend.dto.PostDto;
+import com.example.blogbackend.entity.Category;
 import com.example.blogbackend.entity.Post;
+import com.example.blogbackend.entity.PostCategory;
+import com.example.blogbackend.entity.User;
 import com.example.blogbackend.exceptionhandle.CustomException;
+import com.example.blogbackend.repository.CategoryRepository;
+import com.example.blogbackend.repository.PostCategoryRepository;
 import com.example.blogbackend.repository.PostRepository;
+import com.example.blogbackend.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +23,15 @@ import java.util.Optional;
 public class PostServiceImpl implements PostService{
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PostCategoryRepository postCategoryRepository;
 
     @Override
     public List<Post> getAllPosts(){
@@ -51,23 +68,61 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Post updatePost(Long postId, Post postToUpdate){
+    public Post updatePost(Long postId, PostDto postDto){
         try {
             Post existPost = postRepository.findById(postId)
                     .orElseThrow(() -> new NoSuchElementException("Không tìm thấy bài viết dùng với Id: " + postId));
-            BeanUtils.copyProperties(postToUpdate, existPost, "id");
+            BeanUtils.copyProperties(postDto, existPost, "id", "categories");
+
+            postCategoryRepository.deleteInBatch(existPost.getCategories());
+
+            List<Category> categories = categoryRepository.findAllById(postDto.getCategoryIds());
+            if (categories.size() != postDto.getCategoryIds().size()) {
+                throw new CustomException("One or more categories not found");
+            }
+            existPost.getCategories().clear();
+
+            for (Category category : categories) {
+                PostCategory postCategory = new PostCategory(existPost, category);
+                existPost.getCategories().add(postCategory);
+            }
+
             return postRepository.save(existPost);
+
         }catch (Exception e){
             throw new CustomException("Lỗi khi cập nhật bài viết", e);
         }
     }
 
     @Override
-    public Post addPost(Post postToAdd){
-        try {
-            return postRepository.save(postToAdd);
-        }catch (Exception e){
-            throw new CustomException("Lỗi khi đăng bài viết", e);
+    public Post addPost(PostDto postDto){
+        Post post = new Post();
+        BeanUtils.copyProperties(postDto, post);
+
+        User author = userRepository.findById(postDto.getAuthorId())
+                .orElseThrow(() -> new CustomException("Không có người dùng với id " + postDto.getAuthorId()));
+        post.setAuthor(author);
+
+        if(postDto.getParentId() != null){
+            Post parentPost = postRepository.findById(postDto.getParentId())
+                    .orElseThrow(() -> new CustomException("Không tìm thấy bài đăng với id " + postDto.getParentId()));
+            post.setParent(parentPost);
+        }
+
+        List<Category> categories = categoryRepository.findAllById(postDto.getCategoryIds());
+        if(categories.size() != postDto.getCategoryIds().size()){
+            throw new CustomException("Một hoặc nhiều hơn danh mục không tìm thấy");
+        }
+
+        for(Category category : categories){
+            PostCategory postCategory = new PostCategory(post, category);
+            post.getCategories().add(postCategory);
+        }
+
+        try{
+            return postRepository.save(post);
+        }catch (DataIntegrityViolationException e){
+            throw new CustomException("Error: ", e);
         }
     }
 

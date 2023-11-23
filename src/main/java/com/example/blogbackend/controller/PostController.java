@@ -1,7 +1,10 @@
 package com.example.blogbackend.controller;
 
+import com.example.blogbackend.dto.PostDto;
 import com.example.blogbackend.entity.Post;
 import com.example.blogbackend.service.PostService;
+import com.fasterxml.jackson.databind.util.BeanUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +38,7 @@ public class PostController {
     }
 
     @PutMapping
-    public ResponseEntity<?> editPost(@RequestParam Long postid, @RequestBody Post postToEdit){
+    public ResponseEntity<?> editPost(@RequestParam Long postid, @RequestBody PostDto postToEdit){
         try {
             Post updatedPost = postService.updatePost(postid, postToEdit);
             return new ResponseEntity<>(updatedPost, HttpStatus.OK);
@@ -44,10 +47,11 @@ public class PostController {
         }
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addPost(@RequestBody Post postToAdd){
+    @PostMapping
+    public ResponseEntity<?> addPost(@RequestBody PostDto postDto){
         try{
-            return new ResponseEntity<>(postService.addPost(postToAdd), HttpStatus.OK);
+            Post createdPost = postService.addPost(postDto);
+            return new ResponseEntity<>(createdPost, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

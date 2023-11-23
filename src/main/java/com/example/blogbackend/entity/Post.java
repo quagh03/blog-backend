@@ -3,6 +3,7 @@ package com.example.blogbackend.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class Post {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<PostCategory> categories;
+    private List<PostCategory> categories = new ArrayList<>();
 
     @Column(name = "title", nullable = false)
     private String title;

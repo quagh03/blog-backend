@@ -1,5 +1,6 @@
 package com.example.blogbackend.service;
 
+import com.example.blogbackend.dto.PostDto;
 import com.example.blogbackend.entity.Post;
 
 import java.util.List;
@@ -12,9 +13,9 @@ public interface PostService {
 
     List<Post> searchByKeyword(String keyword);
 
-    Post updatePost(Long postId, Post postToUpdate);
+    Post updatePost(Long postId, PostDto postDto);
 
-    Post addPost(Post postToAdd);
+    Post addPost(PostDto postDto);
 
     void deletePost(Long id);
 }
