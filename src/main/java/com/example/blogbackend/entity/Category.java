@@ -1,5 +1,7 @@
 package com.example.blogbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -19,8 +21,10 @@ public class Category {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
+    @JsonBackReference
     private Category parent;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Category> children;
 

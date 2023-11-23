@@ -2,13 +2,10 @@ package com.example.blogbackend.controller;
 
 import com.example.blogbackend.entity.Post;
 import com.example.blogbackend.service.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.rmi.server.ExportException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/blog/posts")
@@ -47,19 +44,10 @@ public class PostController {
         }
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addPost(@RequestBody Post postToAdd){
         try{
             return new ResponseEntity<>(postService.addPost(postToAdd), HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<?> searchByKeyword(@RequestParam String keyword){
-        try {
-            return new ResponseEntity<>(postService.searchByKeyword(keyword), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
