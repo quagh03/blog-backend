@@ -13,7 +13,7 @@ public class PostMeta {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @Column(name = "key", nullable = false)
+    @Column(name = "`key`", nullable = false)
     private String key;
 
     @Column(name = "content", columnDefinition = "TEXT")

@@ -67,3 +67,20 @@ public class PostController {
         }
     }
 }
+
+//POST JSON
+//                  {
+//                "authorId": 1,
+//                "parentId": null,
+//                "categoryIds": [1, 3],
+//                "title": "Tiêu đề bài viết mới",
+//                "metaTitle": "Meta tiêu đề bài viết mới",
+//                "slug": "tieu-de-bai-viet-moi",
+//                "summary": "Tóm tắt bài viết mới",
+//                "published": true,
+//                "createdAt": "2023-11-26T10:34:56",
+//                "updatedAt": "2023-11-26T10:34:56",
+//                "publishedAt": "2023-11-23T14:34:56",
+//                "content": "Nội dung bài viết mới",
+//                "thumbnail": "URL hình ảnh đại diện bài viết mới"
+//                }
