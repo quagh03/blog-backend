@@ -2,6 +2,7 @@ package com.example.blogbackend.controller;
 
 import com.example.blogbackend.entity.Category;
 import com.example.blogbackend.service.CategoryService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,7 @@ public class CategoryController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<?> addCategory(@RequestBody Category categoryToSave){
         try {
             categoryService.saveCategory(categoryToSave);
@@ -46,6 +48,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("{categoryid}")
+    @Transactional
     public ResponseEntity<?> deleteCategory(@PathVariable Long categoryid){
         try {
             categoryService.deleteCategory(categoryid);
@@ -56,6 +59,7 @@ public class CategoryController {
     }
 
     @PutMapping("{categoryid}")
+    @Transactional
     public ResponseEntity<?> updateCategory(@PathVariable Long categoryid, @RequestBody Category category){
         try {
             categoryService.editCategory(categoryid, category);

@@ -10,6 +10,8 @@ import com.example.blogbackend.repository.CategoryRepository;
 import com.example.blogbackend.repository.PostCategoryRepository;
 import com.example.blogbackend.repository.PostRepository;
 import com.example.blogbackend.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.BeanUtils;
@@ -34,6 +36,9 @@ public class PostServiceImpl implements PostService{
 
     @Autowired
     private PostCategoryRepository postCategoryRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public List<Post> getAllPosts(){
@@ -70,13 +75,19 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
+    @Transactional
     public Post updatePost(Long postId, PostDto postDto){
         try {
             Post existPost = postRepository.findById(postId)
                     .orElseThrow(() -> new NoSuchElementException("Không tìm thấy bài viết dùng với Id: " + postId));
-            BeanUtils.copyProperties(postDto, existPost, "id", "categories");
+
+
+            BeanUtils.copyProperties(postDto, existPost, "id", "categories","updatedAt", "createAt");
 
             postCategoryRepository.deleteInBatch(existPost.getCategories());
+
+            entityManager.flush();
+            entityManager.clear();
 
             List<Category> categories = categoryRepository.findAllById(postDto.getCategoryIds());
             if (categories.size() != postDto.getCategoryIds().size()) {
@@ -88,7 +99,6 @@ public class PostServiceImpl implements PostService{
                 PostCategory postCategory = new PostCategory(existPost, category);
                 existPost.getCategories().add(postCategory);
             }
-
             return postRepository.save(existPost);
 
         }catch (Exception e){
@@ -97,6 +107,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
+    @Transactional
     public Post addPost(PostDto postDto){
         Post post = new Post();
         BeanUtils.copyProperties(postDto, post, "id", "categoryIds");
@@ -129,6 +140,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
+    @Transactional
     public void deletePost(Long id){
         try {
             Post existPost = postRepository.findById(id)

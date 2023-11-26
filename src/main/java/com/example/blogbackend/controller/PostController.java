@@ -4,6 +4,7 @@ import com.example.blogbackend.dto.PostDto;
 import com.example.blogbackend.entity.Post;
 import com.example.blogbackend.service.PostService;
 import com.fasterxml.jackson.databind.util.BeanUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,6 +39,7 @@ public class PostController {
     }
 
     @PutMapping("/{postid}")
+    @Transactional
     public ResponseEntity<?> editPost(@PathVariable Long postid, @RequestBody PostDto postToEdit){
         try {
             Post updatedPost = postService.updatePost(postid, postToEdit);
@@ -48,6 +50,7 @@ public class PostController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<?> addPost(@RequestBody PostDto postDto){
         try{
             Post createdPost = postService.addPost(postDto);
@@ -58,6 +61,7 @@ public class PostController {
     }
 
     @DeleteMapping
+    @Transactional
     public ResponseEntity<?> deletePost(@RequestParam Long postid){
         try{
             postService.deletePost(postid);

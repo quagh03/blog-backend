@@ -3,6 +3,7 @@ package com.example.blogbackend.controller;
 import com.example.blogbackend.dto.PostMetaDto;
 import com.example.blogbackend.entity.PostMeta;
 import com.example.blogbackend.service.PostMetaService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ public class PostMetaController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<?> addPostMeta(@RequestBody PostMetaDto postMeta){
         try {
             PostMeta newPostMeta = postMetaService.addPostMeta(postMeta);

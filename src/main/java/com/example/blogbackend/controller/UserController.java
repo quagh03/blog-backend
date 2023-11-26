@@ -3,6 +3,7 @@ package com.example.blogbackend.controller;
 import com.example.blogbackend.entity.User;
 import com.example.blogbackend.exceptionhandle.CustomException;
 import com.example.blogbackend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +55,7 @@ public class UserController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<?> addUser(@RequestBody User userToAdd){
         try {
             User addedUser =  userService.addUser(userToAdd);
@@ -64,6 +66,7 @@ public class UserController {
     }
 
     @DeleteMapping
+    @Transactional
     public ResponseEntity<?> deleteUser(@RequestParam Long id){
         try {
             userService.deleteUser(id);
@@ -74,6 +77,7 @@ public class UserController {
     }
 
     @PutMapping
+    @Transactional
     public ResponseEntity<?> updateUser(@RequestParam Long id, @RequestBody User newUser){
         try {
             userService.updateUser(id, newUser);
