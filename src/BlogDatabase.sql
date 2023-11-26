@@ -185,6 +185,40 @@ CREATE TABLE `blog`.`role` (
     ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+USE blog;
+-- Trigger for last_login user
+DELIMITER //
+CREATE TRIGGER before_user_update_last_login
+    BEFORE UPDATE ON blog.user
+    FOR EACH ROW
+BEGIN
+    SET NEW.last_login = NOW();
+END;
+//
+DELIMITER ;
+
+-- Trigger for created_at post
+DELIMITER //
+CREATE TRIGGER before_post_insert_created_at
+    BEFORE INSERT ON blog.post
+    FOR EACH ROW
+BEGIN
+    SET NEW.created_at = NOW();
+END;
+//
+DELIMITER ;
+
+-- Trigger for updated_at post
+DELIMITER //
+CREATE TRIGGER before_post_update_updated_at
+    BEFORE UPDATE ON blog.post
+    FOR EACH ROW
+BEGIN
+    SET NEW.updated_at = NOW();
+END;
+//
+DELIMITER ;
+
 -- Sample data for the 'user' table
 INSERT INTO `blog`.`user` (`first_name`, `last_name`, `username`, `mobile`, `email`, `password_hash`, `registered_at`, `intro`, `profile`)
 VALUES

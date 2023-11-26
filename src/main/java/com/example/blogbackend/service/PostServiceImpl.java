@@ -10,6 +10,8 @@ import com.example.blogbackend.repository.CategoryRepository;
 import com.example.blogbackend.repository.PostCategoryRepository;
 import com.example.blogbackend.repository.PostRepository;
 import com.example.blogbackend.repository.UserRepository;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -97,7 +99,7 @@ public class PostServiceImpl implements PostService{
     @Override
     public Post addPost(PostDto postDto){
         Post post = new Post();
-        BeanUtils.copyProperties(postDto, post);
+        BeanUtils.copyProperties(postDto, post, "id", "categoryIds");
 
         User author = userRepository.findById(postDto.getAuthorId())
                 .orElseThrow(() -> new CustomException("Không có người dùng với id " + postDto.getAuthorId()));
@@ -122,7 +124,7 @@ public class PostServiceImpl implements PostService{
         try{
             return postRepository.save(post);
         }catch (DataIntegrityViolationException e){
-            throw new CustomException("Error: ", e);
+            throw new CustomException("Error: " + e.getMessage());
         }
     }
 

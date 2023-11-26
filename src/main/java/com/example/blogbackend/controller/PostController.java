@@ -37,8 +37,8 @@ public class PostController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editPost(@RequestParam Long postid, @RequestBody PostDto postToEdit){
+    @PutMapping("/{postid}")
+    public ResponseEntity<?> editPost(@PathVariable Long postid, @RequestBody PostDto postToEdit){
         try {
             Post updatedPost = postService.updatePost(postid, postToEdit);
             return new ResponseEntity<>(updatedPost, HttpStatus.OK);

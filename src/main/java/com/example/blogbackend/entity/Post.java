@@ -43,7 +43,7 @@ public class Post {
     @Column(name = "published", nullable = false)
     private boolean published;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private Date createdAt;
 
     @Column(name = "updated_at")
