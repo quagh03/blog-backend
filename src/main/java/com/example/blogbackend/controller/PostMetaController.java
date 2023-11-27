@@ -47,4 +47,15 @@ public class PostMetaController {
             return new ResponseEntity<>("Error: ", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity<?> deletePostMeta(@PathVariable Long postMetaId){
+        try {
+            postMetaService.deletePostMeta(postMetaId);
+            return new ResponseEntity<>("Deleted PostMetaId: " + postMetaId, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("Error: ", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
