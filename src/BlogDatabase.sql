@@ -46,14 +46,29 @@ CREATE TABLE `blog`.`post` (
 );
 
 -- Post Table - Additional Index and Constraint
-ALTER TABLE `blog`.`post` 
+ALTER TABLE `blog`.`post`
 ADD INDEX `idx_post_parent` (`parent_id` ASC);
-ALTER TABLE `blog`.`post` 
+ALTER TABLE `blog`.`post`
 ADD CONSTRAINT `fk_post_parent`
   FOREIGN KEY (`parent_id`)
   REFERENCES `blog`.`post` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+-- Image Table
+CREATE TABLE `blog`.`image` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `post_id` BIGINT NOT NULL,
+    `url` TEXT NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `idx_image_post` (`post_id` ASC),
+    CONSTRAINT `fk_image_post`
+    FOREIGN KEY (`post_id`)
+    REFERENCES `blog`.`post` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION
+);
+
 
 -- Post Meta Table
 CREATE TABLE `blog`.`post_meta` (
@@ -98,9 +113,9 @@ CREATE TABLE `blog`.`post_comment` (
 );
 
 -- Post Comment Table - Additional Index and Constraint
-ALTER TABLE `blog`.`post_comment` 
+ALTER TABLE `blog`.`post_comment`
 ADD INDEX `idx_comment_parent` (`parent_id` ASC);
-ALTER TABLE `blog`.`post_comment` 
+ALTER TABLE `blog`.`post_comment`
 ADD CONSTRAINT `fk_comment_parent`
   FOREIGN KEY (`parent_id`)
   REFERENCES `blog`.`post_comment` (`id`)
@@ -119,9 +134,9 @@ CREATE TABLE `blog`.`category` (
 );
 
 -- Category Table - Additional Index and Constraint
-ALTER TABLE `blog`.`category` 
+ALTER TABLE `blog`.`category`
 ADD INDEX `idx_category_parent` (`parent_id` ASC);
-ALTER TABLE `blog`.`category` 
+ALTER TABLE `blog`.`category`
 ADD CONSTRAINT `fk_category_parent`
   FOREIGN KEY (`parent_id`)
   REFERENCES `blog`.`category` (`id`)
