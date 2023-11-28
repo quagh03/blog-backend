@@ -19,7 +19,17 @@ public class PostDto {
     private String content;
     private String thumbnail;
 
+    List<String> imageUrls;
+
     public PostDto() {
+    }
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
     public Long getId() {

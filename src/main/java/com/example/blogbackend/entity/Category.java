@@ -111,16 +111,4 @@ public class Category {
         this.content = content;
     }
 
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", parent=" + (parent != null ? parent.getId() : null) +
-                ", title='" + title + '\'' +
-                ", metaTitle='" + metaTitle + '\'' +
-                ", slug='" + slug + '\'' +
-                ", content='" + content + '\'' +
-                '}';
-    }
-
 }

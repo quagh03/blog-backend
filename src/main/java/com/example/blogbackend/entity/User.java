@@ -145,20 +145,4 @@ public class User {
         this.profile = profile;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", username='" + username + '\'' +
-                ", mobile='" + mobile + '\'' +
-                ", email='" + email + '\'' +
-                ", passwordHash='" + passwordHash + '\'' +
-                ", registeredAt=" + registeredAt +
-                ", lastLogin=" + lastLogin +
-                ", intro='" + intro + '\'' +
-                ", profile='" + profile + '\'' +
-                '}';
-    }
 }

@@ -60,13 +60,4 @@ public class PostMeta {
         this.content = content;
     }
 
-    @Override
-    public String toString() {
-        return "PostMeta{" +
-                "id=" + id +
-                ", post=" + post +
-                ", key='" + key + '\'' +
-                ", content='" + content + '\'' +
-                '}';
-    }
 }

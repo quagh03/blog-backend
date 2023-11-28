@@ -131,18 +131,4 @@ public class PostComment {
         this.user = user;
     }
 
-    @Override
-    public String toString() {
-        return "PostComment{" +
-                "id=" + id +
-                ", post=" + post +
-                ", parent=" + parent +
-                ", title='" + title + '\'' +
-                ", published=" + published +
-                ", createdAt=" + createdAt +
-                ", publishedAt=" + publishedAt +
-                ", content='" + content + '\'' +
-                ", user=" + user +
-                '}';
-    }
 }

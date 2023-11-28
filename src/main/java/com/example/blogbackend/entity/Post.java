@@ -58,6 +58,9 @@ public class Post {
     @Column(name = "thumbnail", columnDefinition = "TEXT")
     private String thumbnail;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
+
     public Post() {
     }
 
@@ -75,6 +78,14 @@ public class Post {
         this.publishedAt = publishedAt;
         this.content = content;
         this.thumbnail = thumbnail;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     public List<PostCategory> getCategories() {
@@ -189,22 +200,4 @@ public class Post {
         this.thumbnail = thumbnail;
     }
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", author=" + author +
-                ", parent=" + parent +
-                ", title='" + title + '\'' +
-                ", metaTitle='" + metaTitle + '\'' +
-                ", slug='" + slug + '\'' +
-                ", summary='" + summary + '\'' +
-                ", published=" + published +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", publishedAt=" + publishedAt +
-                ", content='" + content + '\'' +
-                ", thumbnail='" + thumbnail + '\'' +
-                '}';
-    }
 }
