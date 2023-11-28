@@ -58,7 +58,7 @@ ADD CONSTRAINT `fk_post_parent`
 -- Image Table
 CREATE TABLE `blog`.`image` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `post_id` BIGINT NOT NULL,
+    `post_id` BIGINT DEFAULT NULL,
     `url` TEXT NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `idx_image_post` (`post_id` ASC),

@@ -9,7 +9,7 @@ public class Image {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id", nullable = true)
     private Post post;
 
     @Column(name = "url", columnDefinition = "TEXT", nullable = false)
@@ -20,6 +20,10 @@ public class Image {
 
     public Image(Post post, String url) {
         this.post = post;
+        this.url = url;
+    }
+
+    public Image(String url) {
         this.url = url;
     }
 
