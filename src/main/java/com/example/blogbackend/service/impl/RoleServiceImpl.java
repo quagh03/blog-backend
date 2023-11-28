@@ -1,15 +1,16 @@
-package com.example.blogbackend.service;
+package com.example.blogbackend.service.impl;
 
 import com.example.blogbackend.entity.Role;
 import com.example.blogbackend.exceptionhandle.CustomException;
 import com.example.blogbackend.repository.RoleRepository;
+import com.example.blogbackend.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleRepository roleRepository;
 

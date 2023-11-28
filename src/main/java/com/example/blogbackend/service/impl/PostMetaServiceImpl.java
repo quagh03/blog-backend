@@ -1,4 +1,4 @@
-package com.example.blogbackend.service;
+package com.example.blogbackend.service.impl;
 
 import com.example.blogbackend.dto.PostMetaDto;
 import com.example.blogbackend.entity.Post;
@@ -6,6 +6,7 @@ import com.example.blogbackend.entity.PostMeta;
 import com.example.blogbackend.exceptionhandle.CustomException;
 import com.example.blogbackend.repository.PostMetaRepository;
 import com.example.blogbackend.repository.PostRepository;
+import com.example.blogbackend.service.PostMetaService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PostMetaServiceImpl implements PostMetaService{
+public class PostMetaServiceImpl implements PostMetaService {
     @Autowired
     private PostMetaRepository postMetaRepository;
     @Autowired

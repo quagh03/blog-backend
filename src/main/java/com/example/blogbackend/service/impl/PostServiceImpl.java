@@ -1,4 +1,4 @@
-package com.example.blogbackend.service;
+package com.example.blogbackend.service.impl;
 
 import com.example.blogbackend.dto.PostDto;
 import com.example.blogbackend.entity.Category;
@@ -10,6 +10,7 @@ import com.example.blogbackend.repository.CategoryRepository;
 import com.example.blogbackend.repository.PostCategoryRepository;
 import com.example.blogbackend.repository.PostRepository;
 import com.example.blogbackend.repository.UserRepository;
+import com.example.blogbackend.service.PostService;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.hibernate.Session;
@@ -24,7 +25,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
-public class PostServiceImpl implements PostService{
+public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
 
