@@ -39,7 +39,6 @@ public class PostController {
     }
 
     @PutMapping("/{postid}")
-    @Transactional
     public ResponseEntity<?> editPost(@PathVariable Long postid, @RequestBody PostDto postToEdit){
         try {
             Post updatedPost = postService.updatePost(postid, postToEdit);
@@ -50,7 +49,6 @@ public class PostController {
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<?> addPost(@RequestBody PostDto postDto){
         try{
             Post createdPost = postService.addPost(postDto);
