@@ -63,28 +63,10 @@ public class UserController {
             }
 
         } catch (Exception e) {
-            // Log the exception for debugging purposes
             e.printStackTrace();
-
             return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @ControllerAdvice
-    public class GlobalExceptionHandler {
-
-        @ExceptionHandler(Exception.class)
-        public ResponseEntity<String> handleException(Exception e) {
-            // Log the exception for debugging purposes
-            e.printStackTrace();
-
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-
-
 
     @GetMapping("/")
     public ResponseEntity<?> getUserByUsername(@RequestParam String username){
