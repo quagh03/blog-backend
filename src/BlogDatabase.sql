@@ -189,9 +189,10 @@ CREATE TABLE `blog`.`post_tag` (
 
 -- Role Table
 CREATE TABLE `blog`.`role` (
+  `role_id` BIGINT NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT NOT NULL,
   `role` ENUM('ROLE_ADMIN', 'ROLE_AUTHOR', 'ROLE_GUEST') NOT NULL,
-  PRIMARY KEY (`user_id`, `role`),
+  PRIMARY KEY (`role_id`),
   INDEX `idx_role_user` (`user_id` ASC),
   CONSTRAINT `fk_role_user`
     FOREIGN KEY (`user_id`)
