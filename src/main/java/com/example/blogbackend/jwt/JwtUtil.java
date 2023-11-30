@@ -19,14 +19,16 @@ public class JwtUtil {
     }
 
     public static String generateToken(User user) {
+        Date now = new Date();
+
         String jws = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject(user.getUsername())
                 .claim("roles", user.getRoles().stream().map(Role::getRole).toArray())
-                .setIssuedAt(new Date())
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + 3600000))
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
-        System.out.println("Generated Token: " + jws);
         return jws;
     }
 
