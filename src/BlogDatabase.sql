@@ -11,7 +11,7 @@ CREATE TABLE `blog`.`user` (
   `username` VARCHAR(50) UNIQUE NOT NULL,
   `mobile` VARCHAR(15) NULL,
   `email` VARCHAR(50) NULL,
-  `password_hash` VARCHAR(32) NOT NULL,
+  `password_hash` VARCHAR(60) NOT NULL,
   `registered_at` DATETIME NOT NULL,
   `last_login` DATETIME NULL DEFAULT NULL,
   `intro` TINYTEXT NULL DEFAULT NULL,

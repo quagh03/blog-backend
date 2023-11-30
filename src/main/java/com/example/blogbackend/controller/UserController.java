@@ -2,14 +2,17 @@ package com.example.blogbackend.controller;
 
 import com.example.blogbackend.entity.User;
 import com.example.blogbackend.exceptionhandle.CustomException;
+import com.example.blogbackend.jwt.JwtUtil;
 import com.example.blogbackend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -62,6 +65,40 @@ public class UserController {
             return new ResponseEntity<>("Đã thêm người dùng:\n" + addedUser,HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Lỗi: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/admin")
+    public String hello(){
+        return "Hello World";
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User userToAdd){
+        try {
+            userToAdd.setPasswordHash(new BCryptPasswordEncoder().encode(userToAdd.getPasswordHash()));
+            userToAdd.setRegisteredAt(new Date());
+            User addedUser = userService.addUser(userToAdd);
+            return new ResponseEntity<>("Đã đăng ký người dùng:\n" + addedUser, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Lỗi: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User userToLogin){
+        try {
+            User user = userService.getUserByUsername(userToLogin.getUsername())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy người dùng với Username: " + userToLogin.getUsername()));
+            if (!new BCryptPasswordEncoder().matches(userToLogin.getPasswordHash(), user.getPasswordHash())) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Mật khẩu không chính xác");
+            }
+            String token = JwtUtil.generateToken(user);
+            return new ResponseEntity<>(token, HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

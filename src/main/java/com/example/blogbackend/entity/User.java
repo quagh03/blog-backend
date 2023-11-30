@@ -3,6 +3,7 @@ package com.example.blogbackend.entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -41,6 +42,9 @@ public class User {
     @Column(name = "profile", columnDefinition = "TEXT")
     private String profile;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Role> roles;
+
     public User() {
     }
 
@@ -55,6 +59,14 @@ public class User {
         this.lastLogin = lastLogin;
         this.intro = intro;
         this.profile = profile;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public Long getId() {
