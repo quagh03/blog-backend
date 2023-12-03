@@ -4,6 +4,9 @@ import com.example.blogbackend.entity.User;
 import com.example.blogbackend.exceptionhandle.CustomException;
 import com.example.blogbackend.repository.UserRepository;
 import com.example.blogbackend.service.UserService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,9 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<User> getAllUser(){
@@ -47,6 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long userid) {
         try{
             User user = userRepository.findById(userid)
@@ -58,6 +65,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User addUser(User userToAdd){
         try {
             return userRepository.save(userToAdd);
@@ -67,14 +75,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User updateUser(Long userid, User userToUpdate){
         try {
             User existUser = userRepository.findById(userid)
                     .orElseThrow(() -> new NoSuchElementException("Không tìm thấy người dùng với Id: " + userid));
-            BeanUtils.copyProperties(userToUpdate, existUser, "id");
-            return userRepository.save(existUser);
+
+            if (!entityManager.contains(existUser)) {
+                existUser = entityManager.merge(existUser);
+            }
+            BeanUtils.copyProperties(userToUpdate, existUser, "id","username");
+            return existUser;
         }catch (Exception e){
             throw new CustomException("Lỗi khi cập nhật người dùng", e);
         }
     }
+
+
 }
