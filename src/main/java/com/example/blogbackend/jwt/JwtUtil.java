@@ -2,10 +2,7 @@ package com.example.blogbackend.jwt;
 
 import com.example.blogbackend.entity.Role;
 import com.example.blogbackend.entity.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
@@ -39,8 +36,23 @@ public class JwtUtil {
                     .setSigningKey(SECRET_KEY)
                     .build()
                     .parseClaimsJws(token);
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("JWT token is expired", e);
+        } catch (UnsupportedJwtException e) {
+            throw new RuntimeException("JWT token is unsupported", e);
+        } catch (MalformedJwtException e) {
+            throw new RuntimeException("JWT token is malformed", e);
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse JWT token", e);
+        }
+    }
+
+    public static boolean isTokenValid(String token) {
+        try {
+            parseToken(token);
+            return true;
+        } catch (RuntimeException e) {
+            return false;
         }
     }
 }
