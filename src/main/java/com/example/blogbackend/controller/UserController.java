@@ -1,5 +1,6 @@
 package com.example.blogbackend.controller;
 
+import com.example.blogbackend.dto.UserDto;
 import com.example.blogbackend.entity.Role;
 import com.example.blogbackend.entity.User;
 import com.example.blogbackend.exceptionhandle.CustomException;
@@ -7,6 +8,7 @@ import com.example.blogbackend.jwt.JwtUtil;
 import com.example.blogbackend.service.UserService;
 
 import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,13 +73,15 @@ public class UserController {
         }
     }
 
-    //LẤY NGƯỜI DÙNG THEO ID //fix thành dto
+    //LẤY NGƯỜI DÙNG THEO ID
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id){
         try {
             User user = userService.getUserById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy người dùng với ID: " + id));
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            UserDto userToDisplay = new UserDto();
+            BeanUtils.copyProperties(user, userToDisplay);
+            return new ResponseEntity<>(userToDisplay, HttpStatus.OK);
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {
