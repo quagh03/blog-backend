@@ -22,4 +22,13 @@ public class RoleServiceImpl implements RoleService {
             throw new CustomException("Error: ", e);
         }
     }
+
+    @Override
+    public List<Role> getAllRolesOnSystem(){
+        try {
+            return roleRepository.findAll();
+        }catch (Exception e){
+            throw new CustomException("Error: ", e);
+        }
+    }
 }

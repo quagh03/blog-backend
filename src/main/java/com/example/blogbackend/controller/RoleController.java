@@ -10,17 +10,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/blog/role")
+@RequestMapping("/api/blog/admin/role")
 public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    @GetMapping("{userid}")
-    public ResponseEntity<?> getAllRole(@PathVariable Long userid){
+    @GetMapping("/{userid}")
+    public ResponseEntity<?> getAllRolesForUser(@PathVariable Long userid){
         try {
             return new ResponseEntity<>(roleService.getAllRolesForUser(userid), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>("ERROR", HttpStatus.OK);
+            return new ResponseEntity<>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllRoles(){
+        try {
+            return new ResponseEntity<>(roleService.getAllRolesOnSystem(), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
