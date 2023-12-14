@@ -29,7 +29,9 @@ public class SecurityConfig {
                 .authorizeRequests(requests -> requests
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .requestMatchers("/api/blog/users/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(
+                                "/api/blog/users/admin/**",
+                                "/api/blog/role/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/blog/users/info").authenticated()
                         .requestMatchers("/api/blog/posts").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUTHOR")
                         .requestMatchers(

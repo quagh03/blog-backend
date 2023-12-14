@@ -23,6 +23,7 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/blog/users")
@@ -62,12 +63,16 @@ public class UserController {
     }
 
     //ADMIN LIST RA DANH SÁCH NGƯỜI DÙNG
-    @GetMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping("/admin")
     public ResponseEntity<?> getAllUser(){
         try {
             List<User> users = userService.getAllUser();
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            List<UserDto> displayList = users.stream().map(user -> {
+                UserDto userDto = new UserDto();
+                BeanUtils.copyProperties(user, userDto);
+                return userDto;
+            }).collect(Collectors.toList());
+            return new ResponseEntity<>(displayList, HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -111,7 +116,7 @@ public class UserController {
     }
 
     //XÓA NGƯỜI DÙNG
-    @DeleteMapping
+    @DeleteMapping("/admin/delete")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteUser(@RequestParam Long id){
         try {
