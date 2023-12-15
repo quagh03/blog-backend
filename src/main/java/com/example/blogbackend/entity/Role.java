@@ -21,7 +21,7 @@ public class Role {
     private Long roleId;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
 //    @JsonBackReference
     private User user;
 
