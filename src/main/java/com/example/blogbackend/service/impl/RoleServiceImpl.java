@@ -7,6 +7,7 @@ import com.example.blogbackend.repository.RoleRepository;
 import com.example.blogbackend.repository.UserRepository;
 import com.example.blogbackend.service.RoleService;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role getAllRolesForUser(Long userId) {
         try {
-            return roleRepository.findByUserId(userId).get();
+            Optional<Role> tempRole = roleRepository.findByUserId(userId);
+            if(tempRole.isPresent()){
+                return roleRepository.findByUserId(userId).get();
+            }
+            throw new CustomException("Role not found");
         }catch (Exception e){
             throw new CustomException("Error: ", e);
         }
@@ -57,5 +62,43 @@ public class RoleServiceImpl implements RoleService {
             throw new CustomException("Error: " + e.getMessage());
         }
     }
+
+    @Override
+    @Transactional
+    public Role updateRole(Long roleId, Role roleToUpdate) {
+        try {
+            Optional<Role> existingRole = roleRepository.findById(roleId);
+
+            if (existingRole.isPresent()) {
+                Role role = existingRole.get();
+                User user = userRepository.findById(roleToUpdate.getUser().getId())
+                        .orElseThrow(() -> new CustomException("User not found"));
+                roleToUpdate.setUser(user);
+
+                BeanUtils.copyProperties(roleToUpdate, role, "roleId");
+                return roleRepository.save(role);
+            }
+
+            throw new CustomException("Role not found");
+        } catch (Exception e) {
+            throw new CustomException("Error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteRole(Long roleId){
+        try {
+            Optional<Role> existingRole = roleRepository.findById(roleId);
+            if(existingRole.isPresent()){
+                roleRepository.delete(existingRole.get());
+            }else{
+                throw new CustomException("Role not found");
+            }
+        }catch (Exception e){
+            throw new CustomException("Error: " + e.getMessage());
+        }
+    }
+
 
 }

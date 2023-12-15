@@ -40,4 +40,23 @@ public class RoleController {
             return new ResponseEntity<>("ERROR" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/{roleid}")
+    public ResponseEntity<?> editRole(@PathVariable Long roleid, @RequestBody Role roleToUpdate){
+        try {
+            return new ResponseEntity<>(roleService.updateRole(roleid,roleToUpdate), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("ERROR" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/{roleid}")
+    public ResponseEntity<?> deleteRole(@PathVariable Long roleid){
+        try {
+            roleService.deleteRole(roleid);
+            return new ResponseEntity<>("Deleted role with id: " + roleid, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("ERROR" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

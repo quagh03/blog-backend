@@ -1,6 +1,7 @@
 package com.example.blogbackend.service;
 
 import com.example.blogbackend.entity.Role;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -10,4 +11,10 @@ public interface RoleService {
     List<Role> getAllRolesOnSystem();
 
     Role addRole(Role roleToAdd);
+
+    @Transactional
+    Role updateRole(Long roleId, Role roleToUpdate);
+
+    @Transactional
+    void deleteRole(Long roleId);
 }
