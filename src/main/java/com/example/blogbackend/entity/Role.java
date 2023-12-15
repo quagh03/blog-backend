@@ -1,9 +1,8 @@
 package com.example.blogbackend.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(
@@ -11,6 +10,9 @@ import java.util.Objects;
         indexes = {@Index(name = "idx_role_user", columnList = "user_id")},
         uniqueConstraints = {@UniqueConstraint(name = "uq_role_user", columnNames = {"user_id", "role"})}
 )
+//TRÁNH VÒNG LẶP VÔ TẬN KHI SERIALIZE ĐẦY ĐỦ THÔNG TIN
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "roleId")
+
 public class Role {
 
     @Id
@@ -18,9 +20,9 @@ public class Role {
     @Column(name = "role_id")
     private Long roleId;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+//    @JsonBackReference
     private User user;
 
     @Enumerated(EnumType.STRING)

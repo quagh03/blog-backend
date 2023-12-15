@@ -7,6 +7,8 @@ import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class JwtUtil {
     private static final Key SECRET_KEY = loadSecretKey();
@@ -18,10 +20,12 @@ public class JwtUtil {
     public static String generateToken(User user) {
         Date now = new Date();
 
+        Set<String> roles = user.getRoles() != null ? Set.of(user.getRoles().getRole().name()) : Set.of();
+
         String jws = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject(user.getUsername())
-                .claim("roles", user.getRoles().stream().map(Role::getRole).toArray())
+                .claim("roles", roles)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + 3600000))
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)

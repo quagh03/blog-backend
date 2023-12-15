@@ -1,6 +1,7 @@
 package com.example.blogbackend.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,9 +45,11 @@ public class User {
     @Column(name = "profile", columnDefinition = "TEXT")
     private String profile;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private Set<Role> roles;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JsonManagedReference
+//    @JsonManagedReference được xem như là thành phần chính trong mối quan hệ trong serialization, vì vậy chúng sẽ được serialized bình thường.
+//    @JsonBackReference được xem như phần phụ trợ, và nó sẽ bị lược bỏ trong serialization để tránh tình trạng lặp vô tận.
+    private Role roles;
 
     public User() {
     }
@@ -63,11 +67,11 @@ public class User {
         this.profile = profile;
     }
 
-    public Set<Role> getRoles() {
+    public Role getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Role roles) {
         this.roles = roles;
     }
 

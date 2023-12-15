@@ -130,7 +130,7 @@ public class UserController {
     //SỬA THÔNG TIN NGƯỜI DÙNG
     @PutMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_AUTHOR', 'ROLE_GUEST')")
-    public ResponseEntity<?> updateUser(@RequestParam Long id, @RequestBody User newUser){
+    public ResponseEntity<?> updateUser(@RequestParam Long id, @RequestBody User newUser) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
@@ -138,7 +138,13 @@ public class UserController {
             User currentUser = userService.getUserByUsername(username)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy người dùng với Username: " + username));
 
-            if (currentUser.getRoles().stream().anyMatch(role -> role.getRole().equals(Role.UserRole.ROLE_ADMIN)) || currentUser.getId().equals(id)) {
+            // Check if the current user has the necessary role or is updating their own profile
+            if (currentUser.getRoles().getRole() == Role.UserRole.ROLE_ADMIN || currentUser.getId().equals(id)) {
+                // Ensure that the user being updated has the same role as the current user
+                newUser.setRoles(currentUser.getRoles());
+
+                // Optionally, you can add validation or update only specific fields based on your requirements
+
                 newUser.setPasswordHash(new BCryptPasswordEncoder().encode(newUser.getPasswordHash()));
                 userService.updateUser(id, newUser);
                 return new ResponseEntity<>("Đã cập nhật người dùng có Id: " + id, HttpStatus.OK);
@@ -146,8 +152,11 @@ public class UserController {
                 return new ResponseEntity<>("Bạn không có quyền chỉnh sửa thông tin của người dùng này", HttpStatus.FORBIDDEN);
             }
 
-        }catch (Exception e){
+        } catch (ResponseStatusException e) {
+            throw e; // Re-throw ResponseStatusException to maintain its original status code
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage() + id, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
