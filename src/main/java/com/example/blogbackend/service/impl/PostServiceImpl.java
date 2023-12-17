@@ -41,6 +41,18 @@ public class PostServiceImpl implements PostService {
     private EntityManager entityManager;
 
     @Override
+    public List<Post> getPostsByCategory(Long categoryid){
+        try {
+            Category category = categoryRepository.findById(categoryid)
+                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy danh mục"));
+
+            return postRepository.findByCategoryList(category);
+        }catch (Exception e){
+            throw new CustomException("Lỗi Khi lấy tất cả bài đăng danh mục " + categoryid ,e);
+        }
+    }
+
+    @Override
     public List<Post> getAllPosts(){
         try{
             return postRepository.findAll();

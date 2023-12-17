@@ -28,6 +28,14 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostCategory> categories = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "post_category",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categoryList = new ArrayList<>();
+
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -78,6 +86,14 @@ public class Post {
         this.publishedAt = publishedAt;
         this.content = content;
         this.thumbnail = thumbnail;
+    }
+
+    public List<Category> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<Category> categoryList) {
+        this.categoryList = categoryList;
     }
 
     public Integer getViews() {

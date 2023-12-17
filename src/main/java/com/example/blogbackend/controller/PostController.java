@@ -35,6 +35,16 @@ public class PostController {
 
     //GET POST BY AUTHOR_ID
 
+    //GET POST LIST BY CATEGORY ID
+    @GetMapping("/category/{categoryid}")
+    public ResponseEntity<?> getPostsByCategory(@PathVariable Long categoryid){
+        try {
+            return new ResponseEntity<>(postService.getPostsByCategory(categoryid), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/{postid}")
     public ResponseEntity<?> getPostById(@PathVariable Long postid){
         try{
