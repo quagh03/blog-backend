@@ -2,24 +2,33 @@ package com.example.blogbackend.controller;
 
 import com.example.blogbackend.dto.PostDto;
 import com.example.blogbackend.entity.Post;
+import com.example.blogbackend.entity.User;
 import com.example.blogbackend.service.PostService;
+import com.example.blogbackend.service.UserService;
 import com.fasterxml.jackson.databind.util.BeanUtil;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/blog/posts")
 @CrossOrigin(origins = "http://localhost:3000")
 public class PostController {
     private final PostService postService;
+    private final UserService userService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, UserService userService) {
         this.postService = postService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -82,6 +91,14 @@ public class PostController {
     @PostMapping
     public ResponseEntity<?> addPost(@RequestBody PostDto postDto){
         try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+
+            User user = userService.getUserByUsername(username)
+                    .orElseThrow(() -> new EntityNotFoundException("Khong co user"));
+
+            postDto.setAuthorId(user.getId());
+
             postDto.setViews(0);
             Post createdPost = postService.addPost(postDto);
             return new ResponseEntity<>(createdPost, HttpStatus.OK);
