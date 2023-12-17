@@ -19,7 +19,17 @@ public class PostDto {
     private String content;
     private String thumbnail;
 
+    private Integer views;
+
     public PostDto() {
+    }
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
     }
 
     public Long getId() {

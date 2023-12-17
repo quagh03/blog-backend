@@ -58,6 +58,9 @@ public class Post {
     @Column(name = "thumbnail", columnDefinition = "TEXT")
     private String thumbnail;
 
+    @Column(name = "views")
+    private Integer views;
+
     public Post() {
     }
 
@@ -75,6 +78,14 @@ public class Post {
         this.publishedAt = publishedAt;
         this.content = content;
         this.thumbnail = thumbnail;
+    }
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
     }
 
     public List<PostCategory> getCategories() {

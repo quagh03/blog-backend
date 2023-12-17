@@ -1,6 +1,7 @@
 package com.example.blogbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -28,6 +29,7 @@ public class Category {
     @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Category> children;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<PostCategory> posts;
 
@@ -43,6 +45,9 @@ public class Category {
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
+    @Column(name = "number_of_posts")
+    private Integer numberOfPosts;
+
     public Category() {
     }
 
@@ -53,6 +58,22 @@ public class Category {
         this.metaTitle = metaTitle;
         this.slug = slug;
         this.content = content;
+    }
+
+    public List<PostCategory> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<PostCategory> posts) {
+        this.posts = posts;
+    }
+
+    public Integer getNumberOfPosts() {
+        return numberOfPosts;
+    }
+
+    public void setNumberOfPosts(Integer numberOfPosts) {
+        this.numberOfPosts = numberOfPosts;
     }
 
     public Long getId() {

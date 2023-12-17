@@ -12,9 +12,8 @@ import com.example.blogbackend.repository.PostRepository;
 import com.example.blogbackend.repository.UserRepository;
 import com.example.blogbackend.service.PostService;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -53,7 +52,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public Optional<Post> getPostById(Long id){
         try {
-            return postRepository.findById(id);
+            Post post = postRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+            post.setViews(post.getViews() + 1);
+
+            postRepository.save(post);
+
+            return Optional.of(post);
         }catch (Exception e){
             throw new CustomException("Lỗi khi lấy bài đăng có Id: " + id, e);
         }

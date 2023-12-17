@@ -31,6 +31,10 @@ public class PostController {
         }
     }
 
+    //GET POST BY ACTIVE STATUS
+
+    //GET POST BY AUTHOR_ID
+
     @GetMapping("/{postid}")
     public ResponseEntity<?> getPostById(@PathVariable Long postid){
         try{
