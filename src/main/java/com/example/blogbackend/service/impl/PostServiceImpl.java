@@ -86,7 +86,7 @@ public class PostServiceImpl implements PostService {
     public Post updatePost(Long postId, PostDto postDto){
         try {
             Post existPost = postRepository.findById(postId)
-                    .orElseThrow(() -> new NoSuchElementException("Không tìm thấy bài viết dùng với Id: " + postId));
+                    .orElseThrow(() -> new NoSuchElementException("Không tìm thấy bài viết với Id: " + postId));
 
 
             BeanUtils.copyProperties(postDto, existPost, "id", "categories","updatedAt", "createAt");
