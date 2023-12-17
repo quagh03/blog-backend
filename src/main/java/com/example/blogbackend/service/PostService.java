@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface PostService {
     List<Post> getPostsByCategory(Long categoryid);
 
+    List<Post> getPostsByAuthor(Long authorid);
+
     List<Post> getAllPosts();
 
     Optional<Post> getPostById(Long id);

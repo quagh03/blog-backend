@@ -31,9 +31,24 @@ public class PostController {
         }
     }
 
-    //GET POST BY ACTIVE STATUS
-
+    //SEARCH BY KEYWORD
+    @GetMapping("/keyword/{keyword}")
+    public ResponseEntity<?> serchByKeyword(@PathVariable String keyword){
+        try {
+            return new ResponseEntity<>(postService.searchByKeyword(keyword), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     //GET POST BY AUTHOR_ID
+    @GetMapping("/author/{authorid}")
+    public ResponseEntity<?> getPostsByAuthor(@PathVariable Long authorid){
+        try {
+            return new ResponseEntity<>(postService.getPostsByAuthor(authorid), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     //GET POST LIST BY CATEGORY ID
     @GetMapping("/category/{categoryid}")
@@ -67,6 +82,7 @@ public class PostController {
     @PostMapping
     public ResponseEntity<?> addPost(@RequestBody PostDto postDto){
         try{
+            postDto.setViews(0);
             Post createdPost = postService.addPost(postDto);
             return new ResponseEntity<>(createdPost, HttpStatus.OK);
         }catch (Exception e){

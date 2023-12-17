@@ -53,6 +53,18 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getPostsByAuthor(Long authorid){
+        try {
+            User user = userRepository.findById(authorid)
+                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+            return postRepository.findByAuthor(user);
+        }catch (Exception e){
+            throw new CustomException("Lỗi Khi lấy tất cả bài đăng danh mục " + authorid ,e);
+        }
+    }
+
+    @Override
     public List<Post> getAllPosts(){
         try{
             return postRepository.findAll();

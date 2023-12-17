@@ -18,7 +18,6 @@ public class PostDto {
     private Date publishedAt;
     private String content;
     private String thumbnail;
-
     private Integer views;
 
     public PostDto() {
