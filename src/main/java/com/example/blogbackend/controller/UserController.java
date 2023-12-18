@@ -67,12 +67,7 @@ public class UserController {
     public ResponseEntity<?> getAllUser(){
         try {
             List<User> users = userService.getAllUser();
-            List<UserDto> displayList = users.stream().map(user -> {
-                UserDto userDto = new UserDto();
-                BeanUtils.copyProperties(user, userDto);
-                return userDto;
-            }).collect(Collectors.toList());
-            return new ResponseEntity<>(displayList, HttpStatus.OK);
+            return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -84,9 +79,7 @@ public class UserController {
         try {
             User user = userService.getUserById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy người dùng với ID: " + id));
-            UserDto userToDisplay = new UserDto();
-            BeanUtils.copyProperties(user, userToDisplay);
-            return new ResponseEntity<>(userToDisplay, HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {
