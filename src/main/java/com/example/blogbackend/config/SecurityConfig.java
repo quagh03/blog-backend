@@ -33,12 +33,20 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/blog/users/admin/**",
                                 "/api/blog/admin/role").hasAuthority("ROLE_ADMIN")
+
                         //GET LOGGED-IN USER INFO
                         .requestMatchers("/api/blog/users/info").authenticated()
                         .requestMatchers(HttpMethod.GET,"/api/blog/users").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/blog/users").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/blog/users/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/blog/users").permitAll()
+
+                        //CATEGORIES
+                        .requestMatchers(HttpMethod.GET,"/api/blog/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/blog/categories/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/blog/categories/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/blog/categories/**").hasAuthority("ROLE_ADMIN")
+
                         //POSTS
                         .requestMatchers(HttpMethod.POST,"/api/blog/posts/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUTHOR")
                         .requestMatchers(HttpMethod.PUT,"/api/blog/posts/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUTHOR")
