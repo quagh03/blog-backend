@@ -204,6 +204,17 @@ CREATE TABLE `blog`.`role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 USE blog;
+    -- Trigger for adding Role_GUEST when a new user is inserted
+DELIMITER //
+CREATE TRIGGER after_user_insert_role_guest
+    AFTER INSERT ON blog.user
+    FOR EACH ROW
+BEGIN
+    INSERT INTO blog.role (user_id, role)
+    VALUES (NEW.id, 'ROLE_GUEST');
+END //
+DELIMITER ;
+
 DELIMITER //
 CREATE TRIGGER increase_post_count
     AFTER INSERT ON post_category

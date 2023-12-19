@@ -6,6 +6,7 @@ import com.example.blogbackend.exceptionhandle.CustomException;
 import com.example.blogbackend.repository.RoleRepository;
 import com.example.blogbackend.repository.UserRepository;
 import com.example.blogbackend.service.RoleService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,15 +88,23 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public void deleteRole(Long roleId){
+    public void deleteRole(Long roleId) {
         try {
             Optional<Role> existingRole = roleRepository.findById(roleId);
-            if(existingRole.isPresent()){
+
+            if (existingRole.isPresent()) {
+                Role role = existingRole.get();
+                User user = userRepository.findById(existingRole.get().getUser().getId())
+                        .orElseThrow(() -> new CustomException("User not found"));
+                user.setRoles(new Role());
+
+                userRepository.save(user);
+
                 roleRepository.delete(existingRole.get());
-            }else{
-                throw new CustomException("Role not found");
             }
-        }catch (Exception e){
+
+            throw new CustomException("Role not found");
+        } catch (Exception e) {
             throw new CustomException("Error: " + e.getMessage());
         }
     }

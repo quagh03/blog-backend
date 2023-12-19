@@ -15,6 +15,5 @@ public interface RoleService {
     @Transactional
     Role updateRole(Long roleId, Role roleToUpdate);
 
-    @Transactional
     void deleteRole(Long roleId);
 }
