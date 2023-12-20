@@ -53,6 +53,24 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getPostNotPublised(){
+        try {
+            return postRepository.findByPublished(false);
+        }catch (Exception e){
+            throw new CustomException("Lỗi Khi lấy tất cả bài đăng chua publish" ,e);
+        }
+    }
+
+    @Override
+    public List<Post> getPostPublised(){
+        try {
+            return postRepository.findByPublished(true);
+        }catch (Exception e){
+            throw new CustomException("Lỗi Khi lấy tất cả bài đăng chua publish" ,e);
+        }
+    }
+
+    @Override
     public List<Post> getPostsByAuthor(Long authorid){
         try {
             User user = userRepository.findById(authorid)

@@ -20,4 +20,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByAuthor(User user);
 
+    List<Post> findByPublished(boolean published);
+
 }

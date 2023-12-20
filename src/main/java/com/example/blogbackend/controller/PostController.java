@@ -49,6 +49,26 @@ public class PostController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //GET POST
+    @GetMapping("/notpublised")
+    public ResponseEntity<?> getPostNotPublised(){
+        try {
+            return new ResponseEntity<>(postService.getPostNotPublised(), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/publised")
+    public ResponseEntity<?> getPostsPublised(){
+        try {
+            return new ResponseEntity<>(postService.getPostPublised(), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     //GET POST BY AUTHOR_ID
     @GetMapping("/author/{authorid}")
     public ResponseEntity<?> getPostsByAuthor(@PathVariable Long authorid){
