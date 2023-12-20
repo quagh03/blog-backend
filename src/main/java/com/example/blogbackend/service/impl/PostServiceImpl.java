@@ -130,8 +130,9 @@ public class PostServiceImpl implements PostService {
             Post existPost = postRepository.findById(postId)
                     .orElseThrow(() -> new NoSuchElementException("Không tìm thấy bài viết với Id: " + postId));
 
+            Integer views = existPost.getViews();
 
-            BeanUtils.copyProperties(postDto, existPost, "id", "categories","updatedAt", "createAt");
+            BeanUtils.copyProperties(postDto, existPost, "id", "categories","updatedAt", "createAt", "views");
 
             existPost.getCategories().clear();
 
@@ -148,6 +149,7 @@ public class PostServiceImpl implements PostService {
                 PostCategory postCategory = new PostCategory(existPost, category);
                 existPost.getCategories().add(postCategory);
             }
+            existPost.setViews(views);
             return postRepository.save(existPost);
 
         }catch (Exception e){
