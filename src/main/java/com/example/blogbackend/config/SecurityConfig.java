@@ -57,13 +57,19 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/blog/image/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUTHOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/blog/image/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUTHOR")
                         .requestMatchers(HttpMethod.GET, "/api/blog/image/**").permitAll()
+                        //POST COMMENT
+                        .requestMatchers(HttpMethod.GET, "/api/blog/comments/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/blog/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/blog/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/blog/comments/**").authenticated()
                         //PERMIT ALL
                         .requestMatchers(
                                 "/api/blog/users/register",
                                 "/api/blog/users/login",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/api/blog/users/{id}").permitAll()
+                                "/api/blog/users/{id}",
+                                "/api/blog/comments/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .cors(Customizer.withDefaults());
