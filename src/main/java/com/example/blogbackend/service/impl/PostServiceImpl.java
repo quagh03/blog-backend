@@ -133,7 +133,7 @@ public class PostServiceImpl implements PostService {
 
             BeanUtils.copyProperties(postDto, existPost, "id", "categories","updatedAt", "createAt");
 
-            postCategoryRepository.deleteInBatch(existPost.getCategories());
+            existPost.getCategories().clear();
 
             entityManager.flush();
             entityManager.clear();

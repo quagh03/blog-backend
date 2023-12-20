@@ -25,7 +25,7 @@ public class Post {
     private Post parent;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostCategory> categories = new ArrayList<>();
 
     @ManyToMany
