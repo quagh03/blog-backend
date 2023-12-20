@@ -2,6 +2,7 @@ package com.example.blogbackend.controller;
 
 import com.example.blogbackend.dto.PostDto;
 import com.example.blogbackend.entity.Post;
+import com.example.blogbackend.entity.Role;
 import com.example.blogbackend.entity.User;
 import com.example.blogbackend.service.PostService;
 import com.example.blogbackend.service.UserService;
@@ -16,7 +17,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -101,8 +104,21 @@ public class PostController {
     @PutMapping("/{postid}")
     public ResponseEntity<?> editPost(@PathVariable Long postid, @RequestBody PostDto postToEdit){
         try {
-            Post updatedPost = postService.updatePost(postid, postToEdit);
-            return new ResponseEntity<>(updatedPost, HttpStatus.OK);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+
+            User currentUser = userService.getUserByUsername(userName)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Khong tim thay user"));
+
+            Post existingPost = postService.getPostById(postid)
+                    .orElseThrow(() -> new EntityNotFoundException("Khong co post voi id"));
+            if(currentUser.getRoles().getRole() == Role.UserRole.ROLE_ADMIN || Objects.equals(currentUser.getId(), existingPost.getAuthor().getId())){
+                Post updatedPost = postService.updatePost(postid, postToEdit);
+                return new ResponseEntity<>(updatedPost, HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>("Bạn không có quyền chỉnh sửa thông tin của post này", HttpStatus.FORBIDDEN);
+            }
+
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
