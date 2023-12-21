@@ -143,7 +143,7 @@ public class UserController {
 
                 // Optionally, you can add validation or update only specific fields based on your requirements
 
-                newUser.setPasswordHash(new BCryptPasswordEncoder().encode(newUser.getPasswordHash()));
+                newUser.setPasswordHash(newUser.getPasswordHash());
                 userService.updateUser(id, newUser);
                 return new ResponseEntity<>("Đã cập nhật người dùng có Id: " + id, HttpStatus.OK);
             } else {
