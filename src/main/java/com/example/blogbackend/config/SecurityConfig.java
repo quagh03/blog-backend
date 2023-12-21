@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/api/blog/posts/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUTHOR")
                         .requestMatchers(HttpMethod.GET,"/api/blog/posts/publised").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/blog/posts/{postid}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/blog/posts/category/{categoryid}").permitAll()
                         //IMAGES
                         .requestMatchers(HttpMethod.POST, "/api/blog/image/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUTHOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/blog/image/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_AUTHOR")
