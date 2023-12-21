@@ -141,9 +141,6 @@ public class UserController {
                 // Ensure that the user being updated has the same role as the current user
                 newUser.setRoles(currentUser.getRoles());
 
-                // Optionally, you can add validation or update only specific fields based on your requirements
-
-                newUser.setPasswordHash(newUser.getPasswordHash());
                 userService.updateUser(id, newUser);
                 return new ResponseEntity<>("Đã cập nhật người dùng có Id: " + id, HttpStatus.OK);
             } else {

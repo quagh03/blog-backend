@@ -9,6 +9,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -81,10 +82,17 @@ public class UserServiceImpl implements UserService {
             User existUser = userRepository.findById(userid)
                     .orElseThrow(() -> new NoSuchElementException("Không tìm thấy người dùng với Id: " + userid));
 
+            if (!userToUpdate.getPasswordHash().equals("null")) {
+                userToUpdate.setPasswordHash(new BCryptPasswordEncoder().encode(userToUpdate.getPasswordHash()));
+                BeanUtils.copyProperties(userToUpdate, existUser, "id", "username");
+            }else{
+                BeanUtils.copyProperties(userToUpdate, existUser, "id", "username", "passwordHash");
+            }
+
             if (!entityManager.contains(existUser)) {
                 existUser = entityManager.merge(existUser);
             }
-            BeanUtils.copyProperties(userToUpdate, existUser, "id","username");
+
             return existUser;
         }catch (Exception e){
             throw new CustomException("Lỗi khi cập nhật người dùng", e);
