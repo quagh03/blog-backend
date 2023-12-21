@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,12 +29,28 @@ import java.util.Optional;
 public class PostController {
     private final PostService postService;
     private final UserService userService;
-
     public PostController(PostService postService, UserService userService) {
         this.postService = postService;
         this.userService = userService;
     }
 
+    @PostMapping("/admin/publish/{postid}")
+    public ResponseEntity<?> publishPost(@PathVariable Long postid){
+        try {
+            return new ResponseEntity<>(postService.publishPost(postid), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/admin/unpublish/{postid}")
+    public ResponseEntity<?> unPublishPost(@PathVariable Long postid){
+        try {
+            return new ResponseEntity<>(postService.unPublishPost(postid), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @GetMapping
     public ResponseEntity<?> getAllPosts(){
         try {

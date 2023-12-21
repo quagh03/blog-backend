@@ -14,6 +14,10 @@ public interface PostService {
 
     List<Post> getPostPublised();
 
+    Post publishPost(Long postid);
+
+    Post unPublishPost(Long postid);
+
     List<Post> getPostsByAuthor(Long authorid);
 
     List<Post> getAllPosts();

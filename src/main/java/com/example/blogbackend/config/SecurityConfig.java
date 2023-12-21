@@ -33,7 +33,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/blog/users/admin/**",
                                 "/api/blog/admin/role",
-                                "/api/blog/posts/notpublised").hasAuthority("ROLE_ADMIN")
+                                "/api/blog/posts/notpublised",
+                                "/api/blog/posts/admin/unpublish/{postid}",
+                                "/api/blog/posts/admin/publish/{postid}").hasAuthority("ROLE_ADMIN")
 
                         //GET LOGGED-IN USER INFO
                         .requestMatchers("/api/blog/users/info").authenticated()

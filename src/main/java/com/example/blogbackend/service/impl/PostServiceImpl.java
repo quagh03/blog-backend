@@ -71,6 +71,30 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Post publishPost(Long postid){
+        try {
+            Post existingPost = postRepository.findById(postid)
+                    .orElseThrow(() -> new EntityNotFoundException("Khong Tim Thay Bai Viet"));
+            existingPost.setPublished(true);
+            return postRepository.save(existingPost);
+        }catch (Exception e){
+            throw new CustomException("Lỗi Khi lấy tất cả bài đăng chua publish" ,e);
+        }
+    }
+
+    @Override
+    public Post unPublishPost(Long postid){
+        try {
+            Post existingPost = postRepository.findById(postid)
+                    .orElseThrow(() -> new EntityNotFoundException("Khong Tim Thay Bai Viet"));
+            existingPost.setPublished(false);
+            return postRepository.save(existingPost);
+        }catch (Exception e){
+            throw new CustomException("Lỗi Khi lấy tất cả bài đăng chua publish" ,e);
+        }
+    }
+
+    @Override
     public List<Post> getPostsByAuthor(Long authorid){
         try {
             User user = userRepository.findById(authorid)
