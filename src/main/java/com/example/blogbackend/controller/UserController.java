@@ -5,6 +5,7 @@ import com.example.blogbackend.entity.Role;
 import com.example.blogbackend.entity.User;
 import com.example.blogbackend.exceptionhandle.CustomException;
 import com.example.blogbackend.jwt.JwtUtil;
+import com.example.blogbackend.repository.UserRepository;
 import com.example.blogbackend.service.UserService;
 
 import jakarta.transaction.Transactional;
@@ -30,6 +31,8 @@ import java.util.stream.Collectors;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     //ĐĂNG KÝ
     @PostMapping("/register")
@@ -53,6 +56,8 @@ public class UserController {
             if (!new BCryptPasswordEncoder().matches(userToLogin.getPasswordHash(), user.getPasswordHash())) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Mật khẩu không chính xác");
             }
+            user.setLastLogin(new Date());
+            userRepository.save(user);
             String token = JwtUtil.generateToken(user);
             return new ResponseEntity<>(token, HttpStatus.OK);
         } catch (ResponseStatusException e) {
